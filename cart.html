@@ -1,3 +1,4 @@
+<!--
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -5,14 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://unpkg.com/scrollreveal"></script>
     <link rel="stylesheet" href="./css/styles.css" />
-    <title>Cart - Exclusive E-Commerce Website</title>
+    <title>intern E-Commerce Website</title>
   </head>
   <body>
     <div class="top_nav">
       <div class="container top_nav_container">
         <div class="top_nav_wrapper">
           <p class="tap_nav_p">
-            Summer Sale For All Swim Suits And Free Express Delivery - OFF 50%!
+           Free Express Delivery - OFF 50%!
           </p>
           <a href="#" class="top_nav_link">SHOP NOW</a>
         </div>
@@ -140,4 +141,124 @@
     </footer>
     <script src="./js/cart.js"></script>
   </body>
+</html>
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Cart</title>
+  <link rel="stylesheet" href="./css/styles.css" />
+  <style>
+    .cart_item {
+      border: 1px solid #ccc;
+      padding: 15px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .cart_img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+    }
+
+    .cart_delete {
+      background-color: crimson;
+      color: white;
+      padding: 5px 10px;
+      border: none;
+      cursor: pointer;
+      margin-left: auto;
+    }
+
+    .cart-total {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    .cart_wrapper {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div class="cart_wrapper">
+    <h1>Your Shopping Cart</h1>
+
+    <div class="cart-items"></div>
+
+    <h3 class="cart-total">Total: ₹0</h3>
+  </div>
+
+  <script>
+    const CartItems = document.querySelector(".cart-items");
+    const cartTotalDisplay = document.querySelector(".cart-total");
+
+    let cartTotal = 0;
+
+    function displayCartItems() {
+      const items = JSON.parse(localStorage.getItem("cart")) || [];
+
+      CartItems.innerHTML = "";
+      cartTotal = 0;
+
+      if (items.length === 0) {
+        CartItems.innerHTML = "<p>Your cart is empty.</p>";
+        cartTotalDisplay.textContent = "Total: ₹0";
+        return;
+      }
+
+      items.forEach((item, index) => {
+        const cartItem = document.createElement("div");
+        cartItem.className = "cart_item";
+
+        cartItem.innerHTML = `
+          <p><strong>ID:</strong> ${item.id}</p>
+          <p><strong>Title:</strong> ${item.title}</p>
+          <img src="${item.image}" alt="${item.title}" class="cart_img" />
+          <p><strong>Price:</strong> ₹${item.price}</p>
+          <button class="cart_delete" data-index="${index}">Delete</button>
+        `;
+
+        CartItems.appendChild(cartItem);
+        cartTotal += parseFloat(item.price);
+      });
+
+      cartTotalDisplay.textContent = `Total: ₹${cartTotal.toFixed(2)}`;
+      attachDeleteHandlers();
+    }
+
+    function attachDeleteHandlers() {
+      const deleteButtons = document.querySelectorAll(".cart_delete");
+      deleteButtons.forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          const index = e.target.getAttribute("data-index");
+          removeItemFromCart(index);
+        });
+      });
+    }
+
+    function removeItemFromCart(index) {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      cart.splice(index, 1);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      displayCartItems(); // Refresh UI
+    }
+
+    displayCartItems();
+  </script>
+</body>
 </html>
